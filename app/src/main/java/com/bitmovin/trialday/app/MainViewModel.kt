@@ -17,12 +17,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel(), Listener {
 
     init {
-        eventBus.register(this, ConcreteEvent::class.java)
-        eventBus.register(this, ConcreteEvent::class.java, Priority.HIGH)
-        eventBus.notifyListeners(ConcreteEvent("real data"))
-        eventBus.register(this, SecondEvent::class.java)
-
-        eventBus.notifyListeners(SecondEvent("second data"))
+        test()
     }
 
     override fun onCleared() {
@@ -32,11 +27,54 @@ class MainViewModel @Inject constructor(
     }
 
     override fun <T : Event> onEvent(event: T) {
-        if (event is ConcreteEvent) {
-            Log.d("MainViewModel", "--- Event is ConcreteEvent ---")
-            Log.d("MainViewModel", "--- data is ${event.concreteData} ---")
-        } else {
-            Log.d("MainViewModel", "--- Event has been called, but is not ConcreteEvent ---")
+        when (event) {
+            is ConcreteEvent -> {
+                Log.d("MainViewModel", "--- Event is ConcreteEvent ---")
+            }
+            is SecondEvent -> {
+                Log.d("MainViewModel", "--- Event is SecondEvent ---")
+            }
+            else -> {
+                Log.d("MainViewModel", "--- Event is else ---")
+            }
         }
+    }
+
+    fun test() {
+        eventBus.register(this, ConcreteEvent::class.java)
+        eventBus.register(this, ConcreteEvent::class.java, Priority.HIGH)
+
+        eventBus.register(object : Listener {
+            override fun <T : Event> onEvent(event: T) {
+                Log.d("SecondListener", "--- ConcreteEvent, SecondListener, Priority.DEFAULT")
+            }
+
+        }, ConcreteEvent::class.java)
+
+        eventBus.register(object : Listener {
+            override fun <T : Event> onEvent(event: T) {
+                Log.d("ThirdListener", "--- ConcreteEvent, ThirdListener, Priority.HIGH")
+            }
+
+        }, ConcreteEvent::class.java, Priority.HIGH)
+
+        eventBus.register(object : Listener {
+            override fun <T : Event> onEvent(event: T) {
+                Log.d("FourthListener", "--- ConcreteEvent, FourthListener, Priority.DEFAULT")
+            }
+
+        }, ConcreteEvent::class.java)
+
+        eventBus.register(object : Listener {
+            override fun <T : Event> onEvent(event: T) {
+                Log.d("FifthListener", "--- ConcreteEvent, FifthListener, Priority.HIGH")
+            }
+
+        }, ConcreteEvent::class.java, Priority.HIGH)
+
+        eventBus.notifyListeners(ConcreteEvent("real data"))
+        eventBus.register(this, SecondEvent::class.java)
+
+        eventBus.notifyListeners(SecondEvent("second data"))
     }
 }
