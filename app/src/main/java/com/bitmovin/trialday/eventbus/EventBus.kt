@@ -71,8 +71,12 @@ class EventBus @Inject constructor() {
                 event.javaClass == eventPriorityPair.first
             }
         }
-        // TODO implement priority sorting of listeners for eventType
-        relevantListeners.forEach {
+        val sortedListeners = relevantListeners.toList().sortedBy {
+            (_, eventPriorityPairSet) -> eventPriorityPairSet.first { eventPriorityPair ->
+                event.javaClass == eventPriorityPair.first
+        }.second
+        }.asReversed().toMap()
+        sortedListeners.forEach {
             it.key.onEvent(event)
         }
     }
