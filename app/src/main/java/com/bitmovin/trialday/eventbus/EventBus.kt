@@ -1,6 +1,7 @@
 package com.bitmovin.trialday.eventbus
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -9,7 +10,8 @@ class EventBus @Inject constructor() {
     // TODO sort by priority
     // TODO concurrency & thread safety
 
-    private val listeners: ConcurrentHashMap<Listener, Set<Pair<Class<*>, Priority>>> = ConcurrentHashMap()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val listeners: ConcurrentHashMap<Listener, Set<Pair<Class<*>, Priority>>> = ConcurrentHashMap()
 
     fun <T : Event> register(
         listener: Listener,
