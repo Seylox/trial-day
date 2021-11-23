@@ -66,7 +66,13 @@ class EventBus @Inject constructor() {
     }
 
     fun <T : Event> notifyListeners(event: T) {
-        listeners.forEach { // TODO don't notify all listeners, only those that are subscribed to the Events!
+        val relevantListeners = listeners.filterValues { eventPriorityPairSet ->
+            eventPriorityPairSet.any { eventPriorityPair ->
+                event.javaClass == eventPriorityPair.first
+            }
+        }
+        // TODO implement priority sorting of listeners for eventType
+        relevantListeners.forEach {
             it.key.onEvent(event)
         }
     }
