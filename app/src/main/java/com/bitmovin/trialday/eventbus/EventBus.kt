@@ -11,6 +11,7 @@ class EventBus @Inject constructor() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val listeners: ConcurrentHashMap<Listener, Set<Pair<Class<*>, Priority>>> = ConcurrentHashMap()
 
+    @Synchronized
     fun <T : Event> register(
         listener: Listener,
         eventType: Class<T>,
@@ -36,6 +37,7 @@ class EventBus @Inject constructor() {
         }
     }
 
+    @Synchronized
     fun <T : Event> unregister(
         listener: Listener,
         eventType: Class<T>
@@ -57,6 +59,7 @@ class EventBus @Inject constructor() {
         }
     }
 
+    @Synchronized
     fun <T : Event> notifyListeners(event: T) {
         val relevantListeners = listeners.filterValues { eventPriorityPairSet ->
             eventPriorityPairSet.any { eventPriorityPair ->
