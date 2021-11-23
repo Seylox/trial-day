@@ -1,4 +1,4 @@
-package com.bitmovin.trialday
+package com.bitmovin.trialday.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

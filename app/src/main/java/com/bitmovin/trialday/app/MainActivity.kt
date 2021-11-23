@@ -1,9 +1,10 @@
-package com.bitmovin.trialday
+package com.bitmovin.trialday.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.bitmovin.trialday.R
 import com.bitmovin.trialday.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

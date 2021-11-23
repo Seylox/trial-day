@@ -1,4 +1,4 @@
-package com.bitmovin.trialday
+package com.bitmovin.trialday.app
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
