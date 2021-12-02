@@ -42,20 +42,22 @@ class EventBus @Inject constructor() {
         listener: Listener,
         eventType: Class<T>
     ) {
-        if (listeners.containsKey(listener)) {
-            val eventTypes = listeners[listener]?.toMutableSet() ?: mutableSetOf()
-            val eventTypeExists = eventTypes.firstOrNull { eventPriorityPair ->
-                eventType == eventPriorityPair.first
-            }
+        if (!listeners.containsKey(listener)) {
+            return
+        }
 
-            if (eventTypeExists != null) {
-                eventTypes.remove(eventTypeExists)
-                listeners[listener] = eventTypes
-            }
+        val eventTypes = listeners[listener]?.toMutableSet() ?: mutableSetOf()
+        val eventTypeExists = eventTypes.firstOrNull { eventPriorityPair ->
+            eventType == eventPriorityPair.first
+        }
 
-            if (eventTypes.isEmpty()) {
-                listeners.remove(listener)
-            }
+        if (eventTypeExists != null) {
+            eventTypes.remove(eventTypeExists)
+            listeners[listener] = eventTypes
+        }
+
+        if (eventTypes.isEmpty()) {
+            listeners.remove(listener)
         }
     }
 
